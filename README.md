@@ -1,8 +1,9 @@
 <div align="center">
-  <img src="https://img.icons8.com/fluent/144/000000/server-configuration.png" width="100" />
+  <img src="https://raw.githubusercontent.com/Vlxnz/LeeaoWEB/main/logo.ico" width="100" />
   
-  <h1>李敖研究網管理終端 (V70)</h1>
-  <p><b>一款基於 Python 的安全、輕量、簡繁兼容型服務器管理與文件分發系統</b></p>
+  <h1>李敖研究網管理終端</h1>
+  <p><b>一款基於 Python 的安全、輕量、簡繁兼容型服務器管理與文件分發系統，为李敖研究网服务端，为李敖研究网服务端，可自行修改作为他用</b></p>
+  <p><b>所有代码经过AI重复校验</b></p>
 
   <div>
     <img src="https://img.shields.io/badge/Version-V70-orange" />
@@ -15,7 +16,7 @@
 <br />
 
 ## 📖 項目願景
-本項目源於“李敖研究”學術需求，旨在為學術資料提供一套**極致安全**、**零門檻部署**且**具備文化包容性（簡繁兼容）**的分發方案。V70 版本標誌著從個人工具向生產力工具的跨越。
+本項目源於“李敖研究”學術需求，旨在為學術資料提供一套**極致安全**、**零門檻部署**且**具備文化包容性（簡繁兼容）**的分發方案。
 
 ---
 
