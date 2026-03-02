@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>文件预览</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #000; color: #fff; height: 100vh; margin: 0; display: flex; flex-direction: column; }
+        .top-bar { background: rgba(0,0,0,0.8); padding: 15px 25px; display: flex; align-items: center; z-index: 100; }
+        .main-viewer { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        video, img { max-width: 95vw; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        .filename-text { flex: 1; margin: 0 20px; font-weight: 500; opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="javascript:history.back()" class="btn btn-outline-light btn-sm rounded-pill px-3">
+        <i class="fas fa-arrow-left me-2"></i>返回
+    </a>
+    <div class="filename-text text-truncate">{{ filename.split('/')[-1] }}</div>
+    <a href="/download/{{ filename | urlencode }}" class="btn btn-primary btn-sm rounded-pill px-4">
+        <i class="fas fa-download me-2"></i>下载
+    </a>
+</div>
+
+<div class="main-viewer">
+    {% if is_image or filename.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp')) %}
+        <img src="/download/{{ filename | urlencode }}" alt="预览图片">
+    {% elif is_video or filename.lower().endswith(('.mp4', '.mkv', '.mov', '.webm')) %}
+        <video controls autoplay>
+            <source src="/download/{{ filename | urlencode }}" type="video/mp4">
+            您的浏览器不支持 HTML5 视频播放。
+        </video>
+    {% else %}
+        <div class="text-center">
+            <i class="fas fa-file-alt fa-4x mb-3 opacity-25"></i>
+            <h4>该格式暂不支持在线预览</h4>
+            <p class="text-muted">请点击右上角下载后查看</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
