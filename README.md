@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/Vlxnz/LeeaoWEB/main/logo.ico" width="100" />
   
   <h1>李敖研究網管理終端</h1>
-  <p><b>一款基於 Python 的安全、輕量、簡繁兼容型服務器管理與文件分發系統，为李敖研究网服务端，为李敖研究网服务端，可自行修改作为他用</b></p>
+  <p><b>一款基於 Python 的安全、輕量、簡繁兼容型服務器管理與文件分發系統，为李敖研究网服务端，可自行修改作为他用</b></p>
   <p><b>所有代码经过AI重复校验</b></p>
 
   <div>
@@ -83,6 +83,16 @@
     </tr>
   </tbody>
 </table>
+<img width="1620" height="1096" alt="image" src="https://github.com/user-attachments/assets/61e3cc81-5b6a-4c80-ab26-31359a29f11a" />
+<img width="1627" height="1092" alt="image" src="https://github.com/user-attachments/assets/94625831-aad2-4427-ba2e-128b32f52ff9" />
+<img width="1627" height="1102" alt="image" src="https://github.com/user-attachments/assets/6b98f22d-e21e-47b9-a4d7-e0dd9acf466f" />
+<img width="1627" height="1102" alt="image" src="https://github.com/user-attachments/assets/ca1108d2-8b83-4228-a627-bd8a4cf71b42" />
+<img width="2163" height="1225" alt="image" src="https://github.com/user-attachments/assets/ef83e173-3c46-4b09-b21c-96649e352dd8" />
+<img width="1804" height="1020" alt="image" src="https://github.com/user-attachments/assets/caf7a0d2-e7e2-4539-8307-19df0c0cbdc2" />
+
+
+
+
 
 ---
 
