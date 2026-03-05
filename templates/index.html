@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>李敖研究网 - leeao.net</title>
+    <link rel="icon" href="/static/Meihua_ROC.svg.png" type="image/png">
+    {% if static_mode == 'local_only' %}
+    <link href="/static/lib/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/lib/md5.min.js"></script>
+    {% else %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          onerror="this.onerror=null;this.href='/static/lib/bootstrap.min.css';">
+    <script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.19.0/js/md5.min.js"
+            onerror="this.onerror=null;this.src='/static/lib/md5.min.js';"></script>
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+<nav class="navbar navbar-dark mb-3">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-nowrap">
+        <div class="nav-left d-flex align-items-center">
+            <a class="navbar-brand fw-bold d-flex align-items-center me-2" href="/">
+                <img src="/static/Meihua_ROC.svg.png" alt="Logo">
+                <span>李敖研究网</span>
+            </a>
+            <a href="https://tw.leeao.net:51025" class="btn-old-ver">旧版</a>
+            <button class="btn-theme-toggle" onclick="toggleTheme()">模式</button>
+            <span class="disclaimer-text">永久免费 禁止倒卖</span>
+        </div>
+        <div class="nav-right d-flex align-items-center text-white">
+            <button class="btn history-mobile-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#historyDrawer">记录</button>
+            <div class="dropdown history-dropdown me-2">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static">记录</button>
+                <ul class="dropdown-menu dropdown-menu-end" id="historyList"></ul>
+            </div>
+            <div class="me-2 text-end d-flex flex-column justify-content-center">
+                <div id="uName" class="fw-bold">...</div>
+            </div>
+            <img id="uAvatar" src="" class="rounded-circle user-avatar" onclick="showAvatarModal()">
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="breadcrumb-container">
+        <nav aria-label="breadcrumb" style="flex: 1; min-width: 0;">
+            <ol class="breadcrumb" id="pathNav"></ol>
+        </nav>
+        <button class="btn btn-sm btn-outline-secondary" onclick="toggleLayout()" id="layoutBtn">切换网格</button>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="fileSearch" placeholder="🔍 搜索文件..." onkeydown="if(event.keyCode==13) executeSearch()">
+            <button id="searchBtn" onclick="executeSearch()">搜索</button>
+        </div>
+        <button class="btn-fav-toggle" data-bs-toggle="offcanvas" data-bs-target="#favDrawer" onclick="syncFavs()">
+            ⭐ <span>我的收藏</span>
+        </button>
+    </div>
+
+    <div id="fileContainer" class="file-list"></div>
+
+    <div class="pagination-container" id="pager" style="display:none;">
+        <button class="btn-page" id="prevBtn" onclick="changePage(-1)">上一页</button>
+        <div class="page-jump">
+            <input type="number" id="jumpInput" min="1" placeholder="页码">
+            <button class="btn-jump" onclick="jumpToPage()">跳转</button>
+        </div>
+        <button class="btn-page" id="nextBtn" onclick="changePage(1)">下一页</button>
+        <span class="page-info" id="pageLabel"></span>
+    </div>
+
+    <div class="chat-section mt-4 mb-5">
+        <div class="chat-card">
+            <div class="chat-header p-3 fw-bold text-danger">学术交流讨论区</div>
+            <div id="chatBox"></div>
+            <div class="chat-footer p-3">
+                <div id="replyHint" class="reply-hint" style="display:none;"></div>
+                <div class="input-group">
+                    <input type="text" id="msgInput" class="form-control" placeholder="撰写讨论见解..." onkeydown="if(event.keyCode==13) sendMsg()">
+                    <button class="btn btn-dark" onclick="sendMsg()" id="sendBtn">发表</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end" id="historyDrawer" tabindex="-1">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title">历史记录</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <ul class="list-group list-group-flush" id="historyListMobile"></ul>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end" id="favDrawer" tabindex="-1" data-bs-scroll="true">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title">⭐ 我的收藏</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="fav-toolbar">
+        <select id="favGroupFilter" onchange="renderFavs()">
+            <option value="">全部分组</option>
+        </select>
+        <button class="btn-fav-tool" onclick="createFavGroup()">+ 分组</button>
+    </div>
+    <div class="offcanvas-body p-0" id="favContent"></div>
+</div>
+
+<div class="modal fade" id="groupPickerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">选择收藏分组</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <select id="groupPickerSelect" class="form-select"></select>
+                <input id="groupPickerNewName" class="form-control mt-2" placeholder="输入新分组名称" style="display:none;">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button class="btn btn-dark" onclick="saveGroupAssignment()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="playModal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="p-2 text-end"><button type="button" class="btn-close btn-close-white" onclick="closeVideo()"></button></div>
+            <div id="videoWrap"></div>
+            <div id="resumeTip" class="video-resume-tip">已恢复上次播放进度</div>
+            <div class="p-3 d-flex justify-content-center gap-1">
+                <button class="btn btn-xs btn-outline-light" onclick="setSpeed(0.5, event)">0.5x</button>
+                <button class="btn btn-xs btn-outline-light active" onclick="setSpeed(1.0, event)">1x</button>
+                <button class="btn btn-xs btn-outline-light" onclick="setSpeed(1.5, event)">1.5x</button>
+                <button class="btn btn-xs btn-outline-light" onclick="setSpeed(2.0, event)">2x</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="txtModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="txtTitle">文本预览</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" style="max-height: 80vh; overflow: auto;">
+                <pre id="txtContent" class="m-3" style="white-space: pre-wrap; word-break: break-all;"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pdfModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="pdfTitle">文献预览</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="pdfFrame" style="width:100%; height:80vh; border:none;" src=""></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="avatarModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">个人资料</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body py-3">
+                <div class="text-center mb-3">
+                    <img id="profilePreview" src="" class="rounded-circle" style="width:72px;height:72px;object-fit:cover;border:1px solid #ddd;">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label small">显示名称</label>
+                    <input id="profileDisplayName" class="form-control" maxlength="20" placeholder="最多20字，支持中英文数字_-">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label small">头像图片 (PNG/JPG/WEBP, ≤512KB)</label>
+                    <input id="profileAvatarFile" type="file" class="form-control" accept="image/png,image/jpeg,image/webp">
+                </div>
+                <div id="avatarCropWrap" style="display:none;">
+                    <label class="form-label small">头像裁切预览</label>
+                    <div class="d-flex justify-content-center mb-2">
+                        <canvas id="avatarCropCanvas" width="220" height="220" style="width:220px;height:220px;border-radius:50%;border:1px solid #ddd;background:#f5f5f5;"></canvas>
+                    </div>
+                    <div class="small mb-1">缩放</div>
+                    <input id="avatarZoom" type="range" min="100" max="300" value="100" class="form-range">
+                    <div class="small mb-1">左右位置</div>
+                    <input id="avatarOffsetX" type="range" min="-100" max="100" value="0" class="form-range">
+                    <div class="small mb-1">上下位置</div>
+                    <input id="avatarOffsetY" type="range" min="-100" max="100" value="0" class="form-range">
+                </div>
+                <div id="profileTip" class="small text-muted"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark" onclick="saveProfile()">保存资料</button>
+                <button class="btn btn-outline-primary" onclick="resetProfileAvatar()">恢复默认头像</button>
+                <button class="btn btn-outline-secondary" onclick="logout()">退出登录</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if static_mode == 'local_only' %}
+<script src="/static/lib/bootstrap.bundle.min.js"></script>
+{% else %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        onerror="this.onerror=null;this.src='/static/lib/bootstrap.bundle.min.js';"></script>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
