@@ -3,7 +3,7 @@
   
   <h1>李敖研究網管理終端</h1>
   <p><b>一款基於 Python 的安全、輕量、簡繁兼容型服務器管理與文件分發系統，为李敖研究网服务端，可自行修改作为他用</b></p>
-  <p><b>所有代码经过AI重复校验</b></p>
+  <p><b>本项目经AI校验</b></p>
 
   <div>
     <img src="https://img.shields.io/badge/Version-V70-orange" />
@@ -34,17 +34,18 @@
 
 ---
 
-## ✨ 核心功能清單
+##  核心功能清單
 <ul>
   <li><b>自動路徑記憶</b>：程序自動保存上次共享路徑至 SQLite 數據庫，重啟即連。</li>
   <li><b>多媒體實時預覽</b>：支持 MP4, MKV, JPG, PNG 等主流格式直接在網頁端播放與查看。</li>
   <li><b>學術留言區</b>：具備權限隔離功能的評論系統，支持管理員一鍵清理違規信息。</li>
   <li><b>全自動數據庫維護</b>：啟動時自動檢查並補全 <code>instance</code> 目錄下的數據表結構。</li>
+  <li><b>还有很多懒得写了 看截图吧</li>
 </ul>
 
 ---
 
-## 🛡️ 安全防護體系 (Security Hardening)
+##  安全防護體系 (Security Hardening)
 本项目在 V70 版本中通過了多維度模擬攻擊測試：
 
 <table>
@@ -83,20 +84,15 @@
     </tr>
   </tbody>
 </table>
-<img width="1620" height="1096" alt="image" src="https://github.com/user-attachments/assets/61e3cc81-5b6a-4c80-ab26-31359a29f11a" />
-<img width="1627" height="1092" alt="image" src="https://github.com/user-attachments/assets/94625831-aad2-4427-ba2e-128b32f52ff9" />
-<img width="1627" height="1102" alt="image" src="https://github.com/user-attachments/assets/6b98f22d-e21e-47b9-a4d7-e0dd9acf466f" />
-<img width="1627" height="1102" alt="image" src="https://github.com/user-attachments/assets/ca1108d2-8b83-4228-a627-bd8a4cf71b42" />
-<img width="2163" height="1225" alt="image" src="https://github.com/user-attachments/assets/ef83e173-3c46-4b09-b21c-96649e352dd8" />
-<img width="1804" height="1020" alt="image" src="https://github.com/user-attachments/assets/caf7a0d2-e7e2-4539-8307-19df0c0cbdc2" />
-
-
-
-
+<img width="2545" height="1495" alt="image" src="https://github.com/user-attachments/assets/cd68e5d7-31bf-4341-95f8-2d1aeeb30b59" />
+<img width="2535" height="1490" alt="image" src="https://github.com/user-attachments/assets/5656dd8c-4a20-4c42-82f0-1fa452187e84" />
+<img width="2533" height="1499" alt="image" src="https://github.com/user-attachments/assets/b238a368-8c7a-4a15-8c82-82059753d709" />
+<img width="2551" height="1478" alt="image" src="https://github.com/user-attachments/assets/9669ee84-ebbc-4ed7-aa30-63b817bd73b5" />
+<img width="2536" height="1494" alt="image" src="https://github.com/user-attachments/assets/b2cab049-368a-4cfd-b3cc-b0bc4dc2dffa" />
+<img width="3430" height="1218" alt="image" src="https://github.com/user-attachments/assets/ca502b0e-9b05-4d7a-bfca-25497f3bb105" />
 
 ---
-
-## 🚀 打包部署流程
+##  打包部署流程
 
 ### 打包命令
 請在環境中執行以下命令生成 EXE：
